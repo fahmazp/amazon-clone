@@ -69,7 +69,12 @@ export const AuthProvider = ({ children }) => {
   };
 
   const loginWithGoogle = () => {
-    window.location.href = "http://localhost:5000/api/user/auth/google";
+    const baseURL =
+    import.meta.env.MODE === "development"
+      ? "http://localhost:5000"
+      : import.meta.env.VITE_API_URL.replace(/\/api$/, "") || "https://amazon-clone-blond-six.vercel.app";
+
+  window.location.href = `${baseURL}/api/user/auth/google`;
   };
 
   return (

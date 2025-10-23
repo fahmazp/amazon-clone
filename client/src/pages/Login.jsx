@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/context/AuthContext";
+import GoogleLogo from '../assets/images/google.svg';
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -119,7 +120,7 @@ export default function Login() {
             onClick={loginWithGoogle}
             className="w-full ring-1 ring-gray-300 flex items-center justify-center"
           >
-            <img src="/src/assets/images/google.svg" className="w-4 h-4 mr-1" />
+            <img src={GoogleLogo} className="w-4 h-4 mr-1" />
             Sign in with Google
           </Button>
         </CardContent>

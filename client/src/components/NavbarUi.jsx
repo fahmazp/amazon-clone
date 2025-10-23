@@ -3,6 +3,7 @@ import { MapPin, Search, ShoppingCart, Menu } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSearch } from "@/context/SearchContext";
 import { useAuth } from "@/context/AuthContext";
+import AmazonLogo from '../assets/images/AmazonLogo.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,7 +37,7 @@ export default function Navbar() {
           <div className="mr-4">
             <Link to="/">
               <img
-                src="/src/assets/images/AmazonLogo.png"
+                src={AmazonLogo}
                 alt="Amazon"
                 className="w-24"
               />

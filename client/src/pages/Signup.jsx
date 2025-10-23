@@ -4,6 +4,7 @@ import axiosInstance from "@/api/axiosInstance";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import GoogleLogo from '../assets/images/google.svg';
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -118,7 +119,7 @@ export default function Signup() {
             </div>
 
           <Button variant="outline" className="w-full ring-1 ring-gray-300">
-          <img src="/src/assets/images/google.svg" className="w-4 h-4 mr-1" />
+          <img src={GoogleLogo} className="w-4 h-4 mr-1" />
           Sign in with Google
           </Button>
         </CardContent>
