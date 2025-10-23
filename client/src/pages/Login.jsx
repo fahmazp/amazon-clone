@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/context/AuthContext";
+import QuickstoreLogo from '../assets/images/storelogo.png';
 import GoogleLogo from '../assets/images/google.svg';
 
 export default function Login() {
@@ -34,8 +35,8 @@ export default function Login() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white mt-2">
       <img
-        src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
-        alt="Amazon Logo"
+        src={QuickstoreLogo}
+        alt="Logo"
         className="w-28 mb-3"
       />
 
@@ -91,7 +92,7 @@ export default function Login() {
           </div>
 
           <p className="text-xs text-gray-600 mt-4">
-            By continuing, you agree to Amazon’s{" "}
+            By continuing, you agree to Quickstore’s{" "}
             <span className="text-blue-700 hover:underline cursor-pointer">Conditions of Use</span>{" "}
             and{" "}
             <span className="text-blue-700 hover:underline cursor-pointer">Privacy Notice</span>.
@@ -100,12 +101,12 @@ export default function Login() {
           <div className="h-px bg-gray-300 my-4"></div>
 
           <div className="text-sm text-center">
-            <p>New to Amazon?</p>
+            <p>New to Quickstore?</p>
             <Link
               to="/signup"
               className="block bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-md py-2 mt-2 text-gray-800 font-medium"
             >
-              Create your Amazon account
+              Create your Quickstore account
             </Link>
           </div>
 
@@ -127,7 +128,7 @@ export default function Login() {
       </Card>
 
       <footer className="text-xs text-gray-500 mt-6 text-center">
-        © 2025 Amazon Clone | Built by Fahmaz Ashraf
+        © 2025 Quickstore Clone | Built by Fahmaz Ashraf
       </footer>
     </div>
   );

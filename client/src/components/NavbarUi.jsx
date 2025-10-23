@@ -3,7 +3,7 @@ import { MapPin, Search, ShoppingCart, Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSearch } from "@/context/SearchContext";
 import { useAuth } from "@/context/AuthContext";
-import AmazonLogo from '../assets/images/AmazonLogo.png';
+import HeaderLogo from '../assets/images/AmazonLogo.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,13 +24,13 @@ export default function Navbar() {
 
   return (
     <nav className="w-full text-white ">
-      <div className="bg-[#131921] flex-col hidden lg:flex">
+      <div className="bg-[#131921] flex-col hidden md:flex">
         <div className="flex items-center justify-center xl:justify-around gap-1.5 px-2 py-2">
           <div className="mr-4">
             <Link to="/">
               <img
-                src={AmazonLogo}
-                alt="Amazon"
+                src={HeaderLogo}
+                alt="Logo"
                 className="w-24"
               />
             </Link>
@@ -48,7 +48,7 @@ export default function Navbar() {
 
           <form
             onSubmit={handleSearch}
-            className="flex flex-1 max-w-[450px] text-sm mx-3 rounded-sm bg-gray-50 overflow-hidden"
+            className="flex flex-1 sm:max-w-[300px] lg:max-w-[450px] text-sm mx-1.5 lg:mx-3 rounded-sm bg-gray-50 overflow-hidden"
           >
             <select
               value={category}
@@ -66,7 +66,7 @@ export default function Navbar() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-1 px-2 py-2 text-black text-sm placeholder:text-gray-500 outline-none"
-              placeholder="Search Amazon.in (Type and enter)"
+              placeholder="Search quickstore.in (Type and enter)"
             />
             <button
               type="submit"
@@ -125,13 +125,13 @@ export default function Navbar() {
         </div>
       </div>
 
-      <div className="bg-[#131921] flex lg:hidden items-center justify-between px-3 py-2">
+      <div className="bg-[#131921] flex md:hidden items-center justify-between px-3 py-2">
         <button onClick={() => setMenuOpen(!menuOpen)}>
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
         <Link to="/">
-          <img src={AmazonLogo} alt="Amazon" className="w-20" />
+          <img src={HeaderLogo} alt="Logo" className="w-20" />
         </Link>
 
         <Link to="/cart" className="relative">
@@ -143,7 +143,7 @@ export default function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="lg:hidden bg-[#232F3E] text-white p-3 flex flex-col space-y-4 animate-slideDown">
+        <div className="md:hidden bg-[#232F3E] text-white p-3 flex flex-col space-y-4 animate-slideDown">
           <form
             onSubmit={handleSearch}
             className="flex text-sm rounded-sm bg-gray-50 overflow-hidden"
@@ -153,7 +153,7 @@ export default function Navbar() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-1 px-2 py-2 text-black text-sm placeholder:text-gray-500 outline-none"
-              placeholder="Search Amazon.in"
+              placeholder="Search quickstore.in"
             />
             <button
               type="submit"

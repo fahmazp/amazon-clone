@@ -4,6 +4,7 @@ import axiosInstance from "@/api/axiosInstance";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import QuickstoreLogo from '../assets/images/storelogo.png';
 import GoogleLogo from '../assets/images/google.svg';
 
 export default function Signup() {
@@ -33,7 +34,7 @@ export default function Signup() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white mt-2">
       <img
-        src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+        src={QuickstoreLogo}
         alt="Logo"
         className="w-28 mb-3"
       />
@@ -92,7 +93,7 @@ export default function Signup() {
           </form>
 
           <p className="text-xs text-gray-600 mt-4">
-            By creating an account, you agree to Amazon’s{" "}
+            By creating an account, you agree to Quickstore’s{" "}
             <span className="text-blue-700 hover:underline cursor-pointer">
               Conditions of Use
             </span>{" "}
@@ -126,7 +127,7 @@ export default function Signup() {
       </Card>
 
       <footer className="text-xs text-gray-500 mt-6 text-center">
-        © 2025 Amazon Clone | Built by Fahmaz Ashraf
+        © 2025 Quickstore Clone | Built by Fahmaz Ashraf
       </footer>
     </div>
   );

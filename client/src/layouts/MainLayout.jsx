@@ -10,7 +10,7 @@ const MainLayout = () => {
         <Outlet />
       </main>
       <footer className="bg-gray-100 py-4 text-center text-sm text-gray-500">
-        © 2025 Amazon Clone — All rights reserved.
+        © 2025 Quickstore — All rights reserved.
       </footer>
     </div>
   );
