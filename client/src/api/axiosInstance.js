@@ -1,7 +1,12 @@
 import axios from "axios";
 
+const API_BASE_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5000/api"
+    : import.meta.env.VITE_API_URL || "https://your-backend-url.vercel.app/api";
+
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
+  baseURL: API_BASE_URL,
   withCredentials: false, 
 });
 

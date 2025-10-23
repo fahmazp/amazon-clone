@@ -5,6 +5,7 @@ import { generateToken } from "../utils/generateToken.js";
 
 const router = express.Router();
 
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 // router.post("/google", googleSignIn);
@@ -17,12 +18,12 @@ router.get(
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:5173/login",
+    failureRedirect: `${CLIENT_URL}/login`,
     session: true,
   }),
   (req, res) => {
     const token = generateToken(req.user._id);
-    res.redirect(`http://localhost:5173/?token=${token}`);
+    res.redirect(`${CLIENT_URL}/?token=${token}`);
     //res.redirect("http://localhost:5173/");
   }
 );
