@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin, Search, ShoppingCart, Menu } from "lucide-react";
+import { MapPin, Search, ShoppingCart, Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSearch } from "@/context/SearchContext";
 import { useAuth } from "@/context/AuthContext";
@@ -22,18 +22,10 @@ export default function Navbar() {
     navigate("/");
   };
 
-  // const handleLogout = async () => {
-  //   await axiosInstance.get("/user/logout");
-  //   localStorage.removeItem("userInfo");
-  //   navigate("/login");
-  // };
-
-
   return (
-    <nav>
-      <div className="bg-[#131921] text-white flex-col hidden lg:flex">
+    <nav className="w-full text-white ">
+      <div className="bg-[#131921] flex-col hidden lg:flex">
         <div className="flex items-center justify-center xl:justify-around gap-1.5 px-2 py-2">
-          {/* Logo */}
           <div className="mr-4">
             <Link to="/">
               <img
@@ -44,7 +36,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Location */}
           <div className="flex items-center mr-4 hover:underline cursor-pointer">
             <MapPin className="mr-0.5" />
             <div className="flex flex-col leading-tight">
@@ -122,7 +113,6 @@ export default function Navbar() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Cart */}
           <div className="relative flex items-center mx-2 cursor-pointer hover:underline">
             <Link to="/cart" className="flex items-center gap-1">
               <ShoppingCart className="w-6 h-6 lg:w-7 lg:h-7" />
@@ -134,6 +124,66 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+      <div className="bg-[#131921] flex lg:hidden items-center justify-between px-3 py-2">
+        <button onClick={() => setMenuOpen(!menuOpen)}>
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+
+        <Link to="/">
+          <img src={AmazonLogo} alt="Amazon" className="w-20" />
+        </Link>
+
+        <Link to="/cart" className="relative">
+          <ShoppingCart className="w-6 h-6" />
+          <span className="absolute -top-2 left-4 bg-yellow-400 text-black text-xs px-1 rounded-full">
+            0
+          </span>
+        </Link>
+      </div>
+
+      {menuOpen && (
+        <div className="lg:hidden bg-[#232F3E] text-white p-3 flex flex-col space-y-4 animate-slideDown">
+          <form
+            onSubmit={handleSearch}
+            className="flex text-sm rounded-sm bg-gray-50 overflow-hidden"
+          >
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1 px-2 py-2 text-black text-sm placeholder:text-gray-500 outline-none"
+              placeholder="Search Amazon.in"
+            />
+            <button
+              type="submit"
+              className="bg-yellow-400 hover:bg-yellow-500 rounded-r p-2"
+            >
+              <Search className="text-black w-4 h-4" />
+            </button>
+          </form>
+
+          {/* Links */}
+          <div className="flex flex-col space-y-2 text-sm">
+            <Link to="/login" onClick={() => setMenuOpen(false)}>
+              Sign In
+            </Link>
+            <Link to="/my-orders" onClick={() => setMenuOpen(false)}>
+              Your Orders
+            </Link>
+            <button
+              onClick={() => {
+                logout();
+                setMenuOpen(false);
+              }}
+              className="text-left"
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
+      )}
+
     </nav>
   );
 }
