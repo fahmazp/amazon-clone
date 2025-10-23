@@ -4,13 +4,17 @@ import User from "../models/User.js";
 import dotenv from "dotenv";
 dotenv.config();
 
+const callbackURL =
+  process.env.NODE_ENV === "production"
+    ? `${process.env.SERVER_URL}/api/user/auth/google/callback`
+    : "http://localhost:5000/api/user/auth/google/callback";
+
 passport.use(
   new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      // callbackURL: "/auth/google/callback",
-      callbackURL: "http://localhost:5000/api/user/auth/google/callback",
+      callbackURL,
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
