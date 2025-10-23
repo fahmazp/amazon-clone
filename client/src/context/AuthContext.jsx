@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
     const baseURL =
     import.meta.env.MODE === "development"
       ? "http://localhost:5000"
-      : import.meta.env.VITE_API_URL.replace(/\/api$/, "") || "https://amazon-clone-blond-six.vercel.app";
+      : import.meta.env.VITE_API_URL.replace(/\/api$/, "") || "https://quickstore-clone-six.vercel.app";
 
   window.location.href = `${baseURL}/api/user/auth/google`;
   };
