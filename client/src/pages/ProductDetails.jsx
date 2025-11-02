@@ -54,7 +54,7 @@ const ProductDetails = () => {
           className="w-96 h-96 object-contain border rounded-md"
         />
         <div className="flex flex-col">
-          <h3 className="text-sm text-blue-800 font-medium mb-2">Brand:&nbsp;{product.brand}</h3>
+          <h3 className="text-sm text-blue-800 font-medium mb-2 cursor-pointer">Brand:&nbsp;{product.brand}</h3>
           <h2 className="text-2xl font-semibold mb-2">{product.name}</h2>
             <div className="flex items-center gap-1 text-yellow-400 mb-3">
             {Array.from({ length: Math.round(product.rating || 4) }).map((_, i) => (

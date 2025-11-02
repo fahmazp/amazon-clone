@@ -23,7 +23,7 @@ export default function Login() {
     try {
       setLoading(true);
       await login(formData.email, formData.password);
-      alert("Login successful!");
+      // alert("Login successful!");
       navigate("/");
     } catch (error) {
       alert(error);

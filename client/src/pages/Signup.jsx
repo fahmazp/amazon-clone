@@ -4,6 +4,7 @@ import axiosInstance from "@/api/axiosInstance";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 import QuickstoreLogo from '../assets/images/storelogo.png';
 import GoogleLogo from '../assets/images/google.svg';
 
@@ -13,6 +14,7 @@ export default function Signup() {
     email: "",
     password: "",
   });
+  const { loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -119,7 +121,7 @@ export default function Signup() {
               <div className="grow h-px bg-gray-300"></div>
             </div>
 
-          <Button variant="outline" className="w-full ring-1 ring-gray-300">
+          <Button variant="outline" onClick={loginWithGoogle} className="w-full ring-1 ring-gray-300">
           <img src={GoogleLogo} className="w-4 h-4 mr-1" />
           Sign in with Google
           </Button>
