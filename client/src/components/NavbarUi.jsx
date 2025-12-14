@@ -3,7 +3,7 @@ import { MapPin, Search, ShoppingCart, Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSearch } from "@/context/SearchContext";
 import { useAuth } from "@/context/AuthContext";
-import HeaderLogo from '../assets/images/AmazonLogo.png';
+import HeaderLogo from '../assets/images/applogo.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,7 +31,7 @@ export default function Navbar() {
               <img
                 src={HeaderLogo}
                 alt="Logo"
-                className="w-24"
+                className="w-24 lg:w-26 object-contain"
               />
             </Link>
           </div>
@@ -131,7 +131,7 @@ export default function Navbar() {
         </button>
 
         <Link to="/">
-          <img src={HeaderLogo} alt="Logo" className="w-20" />
+          <img src={HeaderLogo} alt="Logo" className="w-24" />
         </Link>
 
         <Link to="/cart" className="relative">
