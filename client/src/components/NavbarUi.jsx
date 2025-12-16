@@ -10,17 +10,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { useCart } from "@/context/CartContext";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { searchTerm, setSearchTerm, category, setCategory } = useSearch();
+  const { cart } = useCart();
   const { logout } = useAuth();
 
   const handleSearch = (e) => {
     e.preventDefault();
     navigate("/");
   };
+
+  const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <nav className="w-full text-white ">
@@ -79,7 +83,7 @@ export default function Navbar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <div className="flex flex-col mx-2 cursor-pointer hover:underline">
-                <span className="text-xs">Hello, sign in</span>
+                <span className="text-xs">Hello, <strong>user</strong></span>
                 <span className="font-bold -mt-1 text-sm">
                   Account &amp; Lists
                 </span>
@@ -116,9 +120,13 @@ export default function Navbar() {
           <div className="relative flex items-center mx-2 cursor-pointer hover:underline">
             <Link to="/cart" className="flex items-center gap-1">
               <ShoppingCart className="w-6 h-6 lg:w-7 lg:h-7" />
-              <span className="absolute top-0 left-5 bg-yellow-400 text-black text-xs px-1 rounded-full">
+              {/* <span className="absolute top-0 left-5 bg-yellow-400 text-black text-xs px-1 rounded-full">
                 0
-              </span>
+              </span> */}
+                <span className="absolute top-0 left-5 bg-yellow-400 text-black text-xs px-1 rounded-full">
+                  {cartCount}
+                </span>
+
               <span className="ml-1 font-bold text-xs mt-1">Cart</span>
             </Link>
           </div>
@@ -136,9 +144,10 @@ export default function Navbar() {
 
         <Link to="/cart" className="relative">
           <ShoppingCart className="w-6 h-6" />
-          <span className="absolute -top-2 left-4 bg-yellow-400 text-black text-xs px-1 rounded-full">
-            0
-          </span>
+            <span className="absolute -top-2 left-4 bg-yellow-400 text-black text-xs px-1 rounded-full">
+              {cartCount}
+            </span>
+
         </Link>
       </div>
 

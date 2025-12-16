@@ -3,10 +3,11 @@ import { useCart } from "@/context/CartContext";
 import { getCart, removeFromCart, updateCartQuantity } from "@/api/cartAPI";
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingBag } from "lucide-react";
+import { toast } from "sonner";
 
 const CartPage = () => {
   const { cart, setCart, loading } = useCart();
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [updatingId, setUpdatingId] = useState(null);
   const navigate = useNavigate();
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
@@ -33,17 +34,29 @@ const CartPage = () => {
   }, [cart]);
 
   // Remove item
+  // const handleRemove = async (productId) => {
+  //   try {
+  //     setIsUpdating(true);
+  //     const updatedCart = await removeFromCart(productId);
+  //     setCart(updatedCart.items);
+  //   } catch (err) {
+  //     toast.error(err?.message || "Failed to remove item");
+  //   } finally {
+  //     setIsUpdating(false);
+  //   }
+  // };
   const handleRemove = async (productId) => {
-    try {
-      setIsUpdating(true);
-      const updatedCart = await removeFromCart(productId);
-      setCart(updatedCart.items);
-    } catch (err) {
-      alert(err.message || "Failed to remove item");
-    } finally {
-      setIsUpdating(false);
-    }
-  };
+  try {
+    setUpdatingId(productId);
+    const updatedCart = await removeFromCart(productId);
+    setCart(updatedCart.items);
+    toast.success("Item removed from cart");
+  } catch (err) {
+    toast.error(err?.message || "Failed to remove item");
+  } finally {
+    setUpdatingId(null);
+  }
+};
 
   // Update cart
   const handleIncrease = async (id, currentQty) => {
@@ -51,7 +64,7 @@ const CartPage = () => {
       const updatedCart = await updateCartQuantity(id, currentQty + 1);
       setCart(updatedCart.items);
     } catch (err) {
-      alert(err.message || "Failed to update quantity");
+      toast.error(err?.message || "Failed to update quantity");
     }
   };
 
@@ -60,18 +73,18 @@ const CartPage = () => {
       const updatedCart = await updateCartQuantity(id, currentQty - 1);
       setCart(updatedCart.items);
     } catch (err) {
-      alert(err.message || "Failed to update quantity");
+      toast.error(err?.message || "Failed to update quantity");
     }
   };
 
-const handleShareProduct = (productId) => {
-  try {
-    const productLink = `${window.location.origin}/product/${productId}`;
-    navigator.clipboard.writeText(productLink);
-    alert("Product link copied!");
-  } catch (err) {
-    alert("Failed to copy link");
-  }
+  const handleShareProduct = (productId) => {
+    try {
+      const productLink = `${window.location.origin}/product/${productId}`;
+      navigator.clipboard.writeText(productLink);
+      toast("Product link copied!");
+    } catch (err) {
+      toast.error(err?.message || "Failed to copy link");
+    }
 };
 
 
@@ -132,7 +145,7 @@ const handleShareProduct = (productId) => {
               >
                 -
               </button>
-              <span className="px-2">{item.quantity}</span>
+              <span className="px-2 font-semibold">{item.quantity}</span>
               <button
                 onClick={() => handleIncrease(item.product._id, item.quantity)}
                 className="bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded"
@@ -150,10 +163,10 @@ const handleShareProduct = (productId) => {
               </button>
               <button
                 onClick={() => handleRemove(item.product._id)}
-                disabled={isUpdating}
+                disabled={updatingId === item.product._id}
                 className="text-red-600 hover:text-red-700 font-semibold"
               >
-                {isUpdating ? "Removing..." : "Remove"}
+                {updatingId === item.product._id ? "Removing..." : "Remove"}
               </button>
             </div>
           </div>
@@ -163,7 +176,7 @@ const handleShareProduct = (productId) => {
       <div className="mt-8 flex justify-between items-center">
         <h3 className="text-lg font-medium">
           Subtotal ({totalItems} items):&nbsp;
-          <span className="font-semibold">₹{totalPrice.toFixed(2)}</span> 
+          <span className="font-bold">₹{totalPrice.toFixed(2)}</span> 
         </h3>
         <button
           onClick={() => navigate("/checkout")}

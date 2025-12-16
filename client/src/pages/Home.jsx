@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axiosInstance from "@/api/axiosInstance";
 import ProductCard from "@/components/ProductCard";
 import { useSearch } from "@/context/SearchContext";
@@ -9,6 +9,7 @@ const Home = () => {
   const [filtered, setFiltered] = useState([]);
   const { searchTerm, category } = useSearch();
   const [loading, setLoading] = useState(true);
+  const productsRef = useRef(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -47,10 +48,21 @@ const Home = () => {
 
   return (
     <>
-      <HomeBannerCarousel />
+    <HomeBannerCarousel
+    onShopNow={() => {
+      setTimeout(() => {
+        productsRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 120);
+    }}
+    />
 
-      <div className="max-w-7xl mx-auto px-6 py-6">
-
+      <div 
+      ref={productsRef}
+      className="max-w-7xl mx-auto px-6 py-6"
+      >
        {loading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {Array.from({ length: 10 }).map((_, i) => (

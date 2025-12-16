@@ -4,6 +4,7 @@ import axiosInstance from "../api/axiosInstance";
 import { addToCart } from "../api/cartAPI";
 import { useCart } from "../context/CartContext";
 import { Star } from "lucide-react";
+import { toast } from "sonner";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -31,9 +32,11 @@ const ProductDetails = () => {
     try {
       const updatedCart = await addToCart(product._id, 1);
       setCart(updatedCart.items);
-      alert("Item added to cart!");
+      toast.success("Item added to cart", {
+      description: product.name,
+    });
     } catch (err) {
-      alert(err.message || "Failed to add to cart");
+      toast.error(err?.message || "Failed to add to cart");
     }
   };
 
@@ -76,7 +79,10 @@ const ProductDetails = () => {
 
             <button
               onClick={() => {
-                alert("Proceeding to buy " + product.name);
+                toast("Proceeding to buy", {
+                description: product.name,
+                });
+
               }}
               className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 xl:px-10 py-2 rounded"
             >

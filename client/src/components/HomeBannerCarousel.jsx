@@ -23,9 +23,9 @@ const banners = [
   { id: 6, img: img5, alt: "Grab Festive Offers" }
 ];
 
-export default function HomeBannerCarousel() {
+export default function HomeBannerCarousel({onShopNow}) {
   return (
-    <div className="relative w-full max-w-[1400px] mx-auto overflow-hidden rounded-b-lg shadow-md mt-0">
+    <div className="relative w-full max-w-[1400px] mx-auto overflow-hidden rounded-b-2xl shadow-md mt-0">
 
       <Swiper
         modules={[Autoplay, Pagination, Navigation, EffectFade]}
@@ -45,13 +45,17 @@ export default function HomeBannerCarousel() {
                 className="w-full h-[250px] sm:h-[300px] md:h-[360px] lg:h-[430px] object-cover transform transition-transform duration-2000 scale-100 hover:scale-105"
               />
 
-              <div className="absolute inset-0 bg-linear-to-b from-black/10 to-black/40" />
+              <div className="absolute bottom-0 left-0 w-full h-24 bg-linear-to-t from-black to-transparent pointer-events-none" />
 
-              <div className="absolute left-6 bottom-4 md:bottom-10 text-gray-300 drop-shadow-3xl">
+              <div className="absolute left-6 bottom-4 md:bottom-10 text-gray-200 drop-shadow-3xl">
                 <h2 className="text-lg md:text-2xl font-semibold">{banner.alt}</h2>
-                <button className="mt-0.5 md:mt-2 px-2.5 md:px-5 py-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded shadow">
-                  Shop Now
-                </button>
+            <button
+              onClick={onShopNow}
+              className="mt-0.5 md:mt-2 px-2.5 md:px-5 py-2 bg-yellow-400 hover:bg-yellow-500 text-black font-semibold rounded shadow transition active:scale-95"
+            >
+              Shop Now
+            </button>
+
               </div>
             </div>
           </SwiperSlide>

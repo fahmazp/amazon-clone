@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 import { createOrder } from "@/api/orderAPI";
+import { toast } from "sonner";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
@@ -37,10 +38,10 @@ const CheckoutPage = () => {
 
       const res = await createOrder(orderData);
 
-      alert("Order placed successfully!");
+      toast.success("Order placed successfully!");
       navigate(`/order/${res._id}`);
     } catch (error) {
-      alert(error.message || "Failed to place order.");
+      toast.error(error?.message || "Failed to place order.");
     } finally {
       setLoading(false);
     }

@@ -1,6 +1,8 @@
 import React from "react";
 import Navbar from "@/components/NavbarUi";
 import { Outlet } from "react-router-dom";
+import FooterUi from "@/components/FooterUi";
+import { Toaster } from "@/components/ui/sonner";
 
 const MainLayout = () => {
   return (
@@ -9,9 +11,12 @@ const MainLayout = () => {
       <main className="grow">
         <Outlet />
       </main>
-      <footer className="bg-gray-100 py-4 text-center text-sm text-gray-500">
-        © 2025 Quickstore — All rights reserved.
-      </footer>
+      <FooterUi />
+      <Toaster
+        position="top-right"
+        richColors
+        closeButton
+      />
     </div>
   );
 };
