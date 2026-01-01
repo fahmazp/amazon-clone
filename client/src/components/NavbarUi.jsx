@@ -50,35 +50,49 @@ export default function Navbar() {
             </div>
           </div>
 
-          <form
-            onSubmit={handleSearch}
-            className="flex flex-1 sm:max-w-[300px] lg:max-w-[450px] text-sm mx-1.5 lg:mx-3 rounded-sm bg-gray-50 overflow-hidden"
-          >
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="rounded-l-sm px-1 border-r text-black bg-[#C0CCCC] outline-none"
-            >
-              <option>All</option>
-              <option>Electronics</option>
-              <option>Mobiles</option>
-              <option>Fashion</option>
-              <option>Home</option>
-            </select>
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 px-2 py-2 text-black text-sm placeholder:text-gray-500 outline-none"
-              placeholder="Search quickstore.in (Type and enter)"
-            />
-            <button
-              type="submit"
-              className="bg-yellow-400 hover:bg-yellow-500 rounded-r p-2"
-            >
-              <Search className="text-black w-4 h-4" />
-            </button>
-          </form>
+<form
+  onSubmit={handleSearch}
+  className="flex flex-1 sm:max-w-[320px] lg:max-w-[480px] mx-2 rounded-full overflow-hidden
+             bg-white shadow-sm border border-gray-300
+             focus-within:ring-2 focus-within:ring-yellow-400 transition"
+>
+  <select
+    value={category}
+    onChange={(e) => setCategory(e.target.value)}
+    className="px-2 py-2
+    text-xs font-semibold text-gray-800
+    bg-zinc-200 
+    border-r border-gray-300 rounded-l-md 
+    shadow-inner outline-none cursor-pointer
+    hover:bg-zinc-300 focus:bg-zinc-300
+    transition"
+  >
+    <option>All</option>
+    <option>Electronics</option>
+    <option>Mobiles</option>
+    <option>Fashion</option>
+    <option>Home</option>
+  </select>
+
+  <input
+    type="text"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="flex-1 px-3 py-2 text-xs text-black placeholder:text-gray-500
+               outline-none"
+    placeholder="Search Quickstore"
+    
+  />
+
+  <button
+    type="submit"
+    className="bg-yellow-400 hover:bg-yellow-500 px-1.5 lg:px-3 flex items-center justify-center
+               transition"
+  >
+    <Search className="w-4 h-4 text-black" />
+  </button>
+</form>
+
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -155,14 +169,15 @@ export default function Navbar() {
         <div className="md:hidden bg-[#232F3E] text-white p-3 flex flex-col space-y-4 animate-slideDown">
           <form
             onSubmit={handleSearch}
-            className="flex text-sm rounded-sm bg-gray-50 overflow-hidden"
+            className="flex text-sm rounded-sm bg-gray-50 overflow-hidden shadow-sm 
+             focus-within:ring focus-within:ring-yellow-400 transition"
           >
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-1 px-2 py-2 text-black text-sm placeholder:text-gray-500 outline-none"
-              placeholder="Search quickstore.in"
+              placeholder="Search Quickstore"
             />
             <button
               type="submit"

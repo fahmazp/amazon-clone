@@ -66,8 +66,11 @@ const ProductDetails = () => {
           </div>
           <p className="text-gray-600 mb-2">{product.description}</p>
           <p className="text-xl font-bold mb-2">₹{product.price}</p>
-          <p className="mb-2 text-sm text-gray-600">
-            {product.countInStock > 0 ? "In Stock" : "Out of Stock"}
+          <p className={`mb-2 font-medium text-sm ${
+              product.countInStock > 0 ? "text-green-700" : "text-red-600"
+            }`}
+          >
+            {product.countInStock > 0 ? "In Stock" : "Out of Stock - Currently Unavailable"}
           </p>
           <div className="flex gap-4 mt-4">
             <button

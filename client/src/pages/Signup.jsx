@@ -34,13 +34,17 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white mt-2">
-      <img
-        src={QuickstoreLogo}
-        alt="Logo"
-        className="w-28 mb-3"
-      />
+<div className="relative flex items-center justify-center min-h-screen overflow-hidden bg-zinc-50 pt-2">
 
+  <div className="absolute inset-0 bg-gradient-to-br from-sky-100 via-blue-100 to-pink-100 animate-gradientSlow opacity-100" />
+  <div className="absolute -top-32 -left-32 w-96 h-96 bg-blue-500 rounded-full blur-3xl opacity-40 animate-floatSlow" />
+  <div className="absolute top-1/3 -right-40 w-[28rem] h-[28rem] bg-pink-300 rounded-full blur-3xl opacity-35 animate-floatReverse" />
+  <div className="absolute bottom-[-10rem] left-1/3 w-[30rem] h-[30rem] bg-emerald-200 rounded-full blur-3xl opacity-30 animate-floatSlow" />      
+
+    <div className="relative z-10 flex flex-col items-center">
+      <img src={QuickstoreLogo} alt="Logo" className="w-28 mb-3"/>
+
+    <div className="backdrop-blur-xl bg-white/90 rounded-md shadow-xl duration-300 hover:shadow-2xl">
       <Card className="w-[350px] border border-gray-300 rounded-md shadow-sm">
         <CardContent className="px-4">
           <h1 className="text-xl font-semibold mb-1.5">Create Account</h1>
@@ -127,10 +131,13 @@ export default function Signup() {
           </Button>
         </CardContent>
       </Card>
-
+    </div>
+    
       <footer className="text-xs text-gray-500 mt-6 text-center">
-        © 2025 Quickstore Clone | Built by Fahmaz Ashraf
+        © 2025 Quickstore Shop | Built by Fahmaz Ashraf
       </footer>
+
+    </div>
     </div>
   );
 }
