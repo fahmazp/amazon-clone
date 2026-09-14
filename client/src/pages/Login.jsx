@@ -44,7 +44,7 @@ export default function Login() {
     <img src={QuickstoreLogo} alt="Logo" className="w-28 mb-3"/>
 
     <div className="backdrop-blur-xl bg-white/90 rounded-md shadow-xl duration-300 hover:shadow-2xl">
-      <Card className="w-[350px] border border-gray-300 rounded-md shadow-sm">
+      <Card className="w-[90vw] sm:w-[350px] border border-gray-300 rounded-md shadow-sm">
         <CardContent className="px-4">
           <h1 className="text-xl font-semibold mb-1.5">Sign in</h1>
 

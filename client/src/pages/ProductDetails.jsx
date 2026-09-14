@@ -29,6 +29,11 @@ const ProductDetails = () => {
 
   // Add to cart logic
   const handleAddToCart = async () => {
+
+    if (product.countInStock === 0) {
+      toast.error("Product is out of stock");
+      return;
+    }    
     try {
       const updatedCart = await addToCart(product._id, 1);
       setCart(updatedCart.items);
@@ -54,7 +59,7 @@ const ProductDetails = () => {
         <img
           src={product.image}
           alt={product.name}
-          className="w-96 h-96 object-contain border rounded-md"
+          className="w-full max-w-sm md:w-96 h-auto md:h-96 object-contain border rounded-md mx-auto md:mx-0"
         />
         <div className="flex flex-col">
           <h3 className="text-sm text-blue-800 font-medium mb-2 cursor-pointer">Brand:&nbsp;{product.brand}</h3>
@@ -70,27 +75,43 @@ const ProductDetails = () => {
               product.countInStock > 0 ? "text-green-700" : "text-red-600"
             }`}
           >
-            {product.countInStock > 0 ? "In Stock" : "Out of Stock - Currently Unavailable"}
+            {product.countInStock > 0
+             ? `In Stock - (${product.countInStock} available)`
+             : "Out of Stock - Currently Unavailable"}
           </p>
           <div className="flex gap-4 mt-4">
             <button
               onClick={handleAddToCart}
-              className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-8 xl:px-10 py-2 rounded"
+              disabled={product.countInStock === 0}
+              className={`px-8 xl:px-10 py-2 rounded font-semibold transition
+              ${
+                product.countInStock === 0
+                  ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                  : "bg-yellow-400 hover:bg-yellow-500 text-black"
+              }
+            `}
             >
               Add to Cart
             </button>
 
             <button
+              disabled={product.countInStock === 0}
               onClick={() => {
                 toast("Proceeding to buy", {
-                description: product.name,
+                  description: product.name,
                 });
-
               }}
-              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 xl:px-10 py-2 rounded"
+              className={`px-8 xl:px-10 py-2 rounded font-semibold transition
+                ${
+                  product.countInStock === 0
+                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
+                    : "bg-orange-500 hover:bg-orange-600 text-white"
+                }
+              `}
             >
               Buy Now
             </button>
+
           </div>
         </div>
       </div>
