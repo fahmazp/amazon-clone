@@ -8,6 +8,7 @@ import connectDB from "./src/config/db.js";
 import passport from "./src/config/passport.js";
 import { userRouter } from "./src/routes/userRoutes.js";
 import { productRouter } from "./src/routes/productRoutes.js";
+import { categoryRouter } from "./src/routes/categoryRoutes.js";
 import { cartRouter } from "./src/routes/cartRoutes.js";
 import { orderRouter } from "./src/routes/orderRoutes.js";
 
@@ -18,7 +19,7 @@ const app = express();
 
 app.use(
   cors({
-  origin: process.env.CLIENT_URL,
+    origin: process.env.CLIENT_URL || "http://localhost:5173",
     credentials: true,
   })
 );
@@ -32,7 +33,11 @@ app.use(
     secret: process.env.SESSION_SECRET || "secret123",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false }, // true if using HTTPS
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "lax",
+    },
   })
 );
 
@@ -41,6 +46,7 @@ app.use(passport.session());
 
 app.use("/api/user", userRouter);
 app.use("/api/products", productRouter);
+app.use("/api/categories", categoryRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/orders", orderRouter);
 
@@ -50,4 +56,3 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-// export default app;

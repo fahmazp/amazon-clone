@@ -10,10 +10,10 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Fetch user on mount
+  // Fetch user profile on mount & when location changes
   const fetchUser = async () => {
     try {
-      const { data } = await axiosInstance.get("/user/me", { withCredentials: true });
+      const { data } = await axiosInstance.get("/user/me");
       setUser(data);
     } catch (err) {
       setUser(null);
@@ -22,34 +22,42 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // JWT token from Google login redirect
   useEffect(() => {
+    // If a token was provided in the query string from Google OAuth redirect, handle cleanup
     const urlParams = new URLSearchParams(location.search);
     const tokenFromUrl = urlParams.get("token");
 
     if (tokenFromUrl) {
       localStorage.setItem("userInfo", JSON.stringify({ token: tokenFromUrl }));
-      axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${tokenFromUrl}`;
-      window.history.replaceState({}, document.title, "/");
+      window.history.replaceState({}, document.title, window.location.pathname);
     }
 
     fetchUser();
-  }, [location]);
+  }, [location.pathname]);
 
   // Email/password login
   const login = async (email, password) => {
     try {
       setLoading(true);
-      const { data } = await axiosInstance.post(
-        "/user/login",
-        { email, password },
-        { withCredentials: true }
-      );
+      const { data } = await axiosInstance.post("/user/login", { email, password });
       setUser(data);
-      localStorage.setItem("userInfo", JSON.stringify(data));
       return data;
     } catch (error) {
-      throw error.response?.data?.message || "Login failed";
+      throw error.response?.data?.message || error.message || "Login failed";
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Register
+  const register = async (name, email, password) => {
+    try {
+      setLoading(true);
+      const { data } = await axiosInstance.post("/user/register", { name, email, password });
+      setUser(data);
+      return data;
+    } catch (error) {
+      throw error.response?.data?.message || error.message || "Registration failed";
     } finally {
       setLoading(false);
     }
@@ -58,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   // Logout
   const logout = async () => {
     try {
-      await axiosInstance.get("/user/logout", { withCredentials: true });
+      await axiosInstance.post("/user/logout");
     } catch (err) {
       console.error("Logout request failed", err);
     } finally {
@@ -70,15 +78,28 @@ export const AuthProvider = ({ children }) => {
 
   const loginWithGoogle = () => {
     const baseURL =
-    import.meta.env.MODE === "development"
-      ? "http://localhost:5000"
-      : import.meta.env.VITE_API_URL.replace(/\/api$/, "") || "https://quickstore-clone-six.vercel.app";
+      import.meta.env.MODE === "development"
+        ? "http://localhost:5000"
+        : (import.meta.env.VITE_API_URL || "").replace(/\/api$/, "") || "https://quickstore-clone-six.vercel.app";
 
-  window.location.href = `${baseURL}/api/user/auth/google`;
+    window.location.href = `${baseURL}/api/user/auth/google`;
   };
 
+  const isAdmin = Boolean(user && user.role === "admin");
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, loginWithGoogle }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAdmin,
+        loading,
+        login,
+        register,
+        logout,
+        loginWithGoogle,
+        refetchUser: fetchUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

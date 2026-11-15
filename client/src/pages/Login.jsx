@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -7,12 +7,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/context/AuthContext";
 import QuickstoreLogo from '../assets/images/storelogo.png';
 import GoogleLogo from '../assets/images/google.svg';
+import { toast } from "sonner";
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const redirect = new URLSearchParams(location.search).get("redirect") || "/";
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -23,10 +27,14 @@ export default function Login() {
     try {
       setLoading(true);
       await login(formData.email, formData.password);
-      // alert("Login successful!");
-      navigate("/");
+      toast.success("Signed in successfully!");
+      navigate(redirect);
     } catch (error) {
-      alert(error);
+      const errorMsg =
+        typeof error === "string"
+          ? error
+          : error?.response?.data?.message || error?.message || "Login failed";
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }

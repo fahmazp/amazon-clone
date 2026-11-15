@@ -1,5 +1,4 @@
 import cloudinary from "../config/cloudinary.js";
-import fs from "fs";
 
 export const uploadProductImage = async (req, res) => {
   try {
@@ -7,21 +6,30 @@ export const uploadProductImage = async (req, res) => {
       return res.status(400).json({ message: "No file uploaded" });
     }
 
-    // Upload to Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "amazon_products",
-      resource_type: "image",
-    });
+    const streamUpload = (fileBuffer) => {
+      return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "quickstore_products" },
+          (error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
+            }
+          }
+        );
+        stream.end(fileBuffer);
+      });
+    };
 
-    // Delete local temp file
-    fs.unlinkSync(req.file.path);
+    const result = await streamUpload(req.file.buffer);
 
     res.status(200).json({
       message: "Image uploaded successfully",
       imageUrl: result.secure_url,
     });
   } catch (error) {
-    console.error("Upload error:", error);
+    console.error("Cloudinary upload error:", error);
     res.status(500).json({ message: "Image upload failed", error: error.message });
   }
 };

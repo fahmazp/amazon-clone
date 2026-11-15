@@ -7,14 +7,19 @@ const API_BASE_URL =
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: false, 
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const user = JSON.parse(localStorage.getItem("userInfo"));
-    if (user?.token) {
-      config.headers.Authorization = `Bearer ${user.token}`;
+    // If a token is in localStorage for legacy / fallback, forward it; otherwise cookies are automatically passed
+    try {
+      const user = JSON.parse(localStorage.getItem("userInfo"));
+      if (user?.token) {
+        config.headers.Authorization = `Bearer ${user.token}`;
+      }
+    } catch (e) {
+      // Ignore JSON parse errors
     }
     return config;
   },

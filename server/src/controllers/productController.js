@@ -1,16 +1,54 @@
 import Product from "../models/Product.js";
 
-//Fetch all products (with optional filters)
+// Fetch all products with search, category filter, price sorting, and pagination
 export const getProducts = async (req, res) => {
   try {
-    const keyword = req.query.keyword
-      ? { name: { $regex: req.query.keyword, $options: "i" } }
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = req.query.limit !== undefined ? Number(req.query.limit) : 10;
+
+    const keyword = req.query.keyword && req.query.keyword.trim() !== ""
+      ? {
+          $or: [
+            { name: { $regex: req.query.keyword.trim(), $options: "i" } },
+            { description: { $regex: req.query.keyword.trim(), $options: "i" } },
+            { brand: { $regex: req.query.keyword.trim(), $options: "i" } },
+          ],
+        }
       : {};
 
-    const category = req.query.category ? { category: req.query.category } : {};
+    const category =
+      req.query.category && req.query.category.toLowerCase() !== "all"
+        ? { category: { $regex: `^${req.query.category.trim()}$`, $options: "i" } }
+        : {};
 
-    const products = await Product.find({ ...keyword, ...category });
-    res.json(products);
+    const filter = { ...keyword, ...category };
+
+    let sortQuery = { createdAt: -1 };
+    if (req.query.sort === "price_asc") {
+      sortQuery = { price: 1 };
+    } else if (req.query.sort === "price_desc") {
+      sortQuery = { price: -1 };
+    } else if (req.query.sort === "rating") {
+      sortQuery = { rating: -1 };
+    } else if (req.query.sort === "newest") {
+      sortQuery = { createdAt: -1 };
+    }
+
+    const totalProducts = await Product.countDocuments(filter);
+    const query = Product.find(filter).sort(sortQuery);
+
+    if (limit > 0) {
+      query.skip((page - 1) * limit).limit(limit);
+    }
+
+    const products = await query;
+
+    res.json({
+      products,
+      page,
+      pages: limit > 0 ? Math.ceil(totalProducts / limit) || 1 : 1,
+      totalProducts,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -39,8 +77,8 @@ export const createProduct = async (req, res) => {
       brand,
       category,
       description,
-      price,
-      countInStock,
+      price: Number(price) || 0,
+      countInStock: Number(countInStock) || 0,
     });
 
     const createdProduct = await product.save();
@@ -56,13 +94,13 @@ export const updateProduct = async (req, res) => {
     const product = await Product.findById(req.params.id);
 
     if (product) {
-      product.name = name || product.name;
-      product.image = image || product.image;
-      product.brand = brand || product.brand;
-      product.category = category || product.category;
-      product.description = description || product.description;
-      product.price = price || product.price;
-      product.countInStock = countInStock || product.countInStock;
+      product.name = name !== undefined ? name : product.name;
+      product.image = image !== undefined ? image : product.image;
+      product.brand = brand !== undefined ? brand : product.brand;
+      product.category = category !== undefined ? category : product.category;
+      product.description = description !== undefined ? description : product.description;
+      product.price = price !== undefined ? Number(price) : product.price;
+      product.countInStock = countInStock !== undefined ? Number(countInStock) : product.countInStock;
 
       const updated = await product.save();
       res.json(updated);
@@ -88,7 +126,6 @@ export const deleteProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 export const addProductReview = async (req, res) => {
   try {

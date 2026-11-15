@@ -6,8 +6,6 @@ export const addToCart = async (productId, quantity = 1) => {
       productId,
       quantity,
     });
-
-    console.log("Cart Updated:", data);
     return data;
   } catch (error) {
     console.error("Add to Cart failed:", error);
@@ -47,3 +45,12 @@ export const updateCartQuantity = async (productId, quantity) => {
   }
 };
 
+export const syncCartAPI = async (items) => {
+  try {
+    const { data } = await axiosInstance.post("/cart/sync", { items });
+    return data;
+  } catch (error) {
+    console.error("Sync Cart failed:", error);
+    throw error.response?.data || { message: "Something went wrong" };
+  }
+};

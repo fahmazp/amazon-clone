@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "../api/axiosInstance";
-import { addToCart } from "../api/cartAPI";
 import { useCart } from "../context/CartContext";
 import { Star } from "lucide-react";
 import { toast } from "sonner";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  const { setCart } = useCart();
+  const { addToCart } = useCart();
   const [loading, setLoading] = useState(true);
 
-  // Fetch prod details
+  // Fetch product details
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -27,91 +27,121 @@ const ProductDetails = () => {
     fetchProduct();
   }, [id]);
 
-  // Add to cart logic
+  // Add to cart handler
   const handleAddToCart = async () => {
-
-    if (product.countInStock === 0) {
+    if (!product || product.countInStock <= 0) {
       toast.error("Product is out of stock");
       return;
-    }    
+    }
     try {
-      const updatedCart = await addToCart(product._id, 1);
-      setCart(updatedCart.items);
+      await addToCart(product, 1);
       toast.success("Item added to cart", {
-      description: product.name,
-    });
+        description: product.name,
+      });
     } catch (err) {
       toast.error(err?.message || "Failed to add to cart");
     }
   };
 
-  // if (!product) return <div className="p-6">Loading...</div>;
-  if (loading)
-    return <div className="text-center mt-20 text-lg">Loading...</div>;
-  if (!product)
+  const handleBuyNow = async () => {
+    if (!product || product.countInStock <= 0) {
+      toast.error("Product is out of stock");
+      return;
+    }
+    try {
+      await addToCart(product, 1);
+      navigate("/checkout");
+    } catch (err) {
+      toast.error(err?.message || "Failed to proceed to buy");
+    }
+  };
+
+  if (loading) {
+    return <div className="text-center mt-20 text-lg text-gray-500">Loading product details...</div>;
+  }
+  if (!product) {
     return (
-      <div className="text-center mt-20 text-red-500">Product not found.</div>
+      <div className="text-center mt-20 text-red-500 font-medium">
+        Product not found.
+      </div>
     );
+  }
+
+  const isOutOfStock = product.countInStock <= 0;
 
   return (
     <div className="max-w-6xl mx-auto p-6 my-2">
       <div className="flex flex-col md:flex-row gap-10">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full max-w-sm md:w-96 h-auto md:h-96 object-contain border rounded-md mx-auto md:mx-0"
-        />
-        <div className="flex flex-col">
-          <h3 className="text-sm text-blue-800 font-medium mb-2 cursor-pointer">Brand:&nbsp;{product.brand}</h3>
-          <h2 className="text-2xl font-semibold mb-2">{product.name}</h2>
-            <div className="flex items-center gap-1 text-yellow-400 mb-3">
-            {Array.from({ length: Math.round(product.rating || 4) }).map((_, i) => (
-              <Star key={i} size={18} fill="currentColor" />
+        <div className="w-full max-w-sm md:w-96 h-auto md:h-96 border rounded-md mx-auto md:mx-0 p-4 bg-white flex items-center justify-center">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="max-h-full max-w-full object-contain"
+          />
+        </div>
+
+        <div className="flex flex-col flex-1">
+          {product.brand && (
+            <h3 className="text-xs uppercase tracking-wider text-blue-700 font-semibold mb-1">
+              Brand: {product.brand}
+            </h3>
+          )}
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">{product.name}</h2>
+
+          <div className="flex items-center gap-1 text-yellow-400 mb-3">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star
+                key={i}
+                size={18}
+                fill={i < Math.round(product.rating || 4) ? "currentColor" : "none"}
+                className={i < Math.round(product.rating || 4) ? "text-yellow-400" : "text-gray-300"}
+              />
             ))}
+            <span className="text-xs text-gray-500 ml-2">
+              ({product.numReviews || 0} customer ratings)
+            </span>
           </div>
-          <p className="text-gray-600 mb-2">{product.description}</p>
-          <p className="text-xl font-bold mb-2">₹{product.price}</p>
-          <p className={`mb-2 font-medium text-sm ${
-              product.countInStock > 0 ? "text-green-700" : "text-red-600"
+
+          <p className="text-gray-600 text-sm mb-4 leading-relaxed">
+            {product.description || "No description available for this product."}
+          </p>
+
+          <p className="text-2xl font-extrabold text-gray-900 mb-2">₹{product.price}</p>
+
+          <p
+            className={`mb-4 font-semibold text-sm ${
+              !isOutOfStock ? "text-green-700" : "text-red-600"
             }`}
           >
-            {product.countInStock > 0
-             ? `In Stock - (${product.countInStock} available)`
-             : "Out of Stock - Currently Unavailable"}
+            {!isOutOfStock
+              ? `In Stock - (${product.countInStock} available)`
+              : "Out of Stock - Currently Unavailable"}
           </p>
-          <div className="flex gap-4 mt-4">
+
+          <div className="flex flex-wrap gap-4 mt-2">
             <button
               onClick={handleAddToCart}
-              disabled={product.countInStock === 0}
-              className={`px-8 xl:px-10 py-2 rounded font-semibold transition
-              ${
-                product.countInStock === 0
-                  ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                  : "bg-yellow-400 hover:bg-yellow-500 text-black"
-              }
-            `}
+              disabled={isOutOfStock}
+              className={`px-8 py-2.5 rounded font-semibold text-sm transition shadow-sm ${
+                isOutOfStock
+                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  : "bg-yellow-400 hover:bg-yellow-500 text-gray-900"
+              }`}
             >
               Add to Cart
             </button>
 
             <button
-              disabled={product.countInStock === 0}
-              onClick={() => {
-                toast("Proceeding to buy", {
-                  description: product.name,
-                });
-              }}
-              className={`px-8 xl:px-10 py-2 rounded font-semibold transition
-                ${
-                  product.countInStock === 0
-                    ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                    : "bg-orange-500 hover:bg-orange-600 text-white"
-                }
-              `}
+              disabled={isOutOfStock}
+              onClick={handleBuyNow}
+              className={`px-8 py-2.5 rounded font-semibold text-sm transition shadow-sm ${
+                isOutOfStock
+                  ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  : "bg-orange-500 hover:bg-orange-600 text-white"
+              }`}
             >
               Buy Now
             </button>
-
           </div>
         </div>
       </div>
