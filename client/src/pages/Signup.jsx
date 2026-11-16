@@ -7,6 +7,9 @@ import { useAuth } from "@/context/AuthContext";
 import QuickstoreLogo from "../assets/images/storelogo.png";
 import GoogleLogo from "../assets/images/google.svg";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
+
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -14,6 +17,7 @@ export default function Signup() {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { register, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
@@ -24,9 +28,32 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+
+    if (trimmedName.length < 2) {
+      toast.error("Name must be at least 2 characters");
+      return;
+    }
+    if (trimmedName.length > 50) {
+      toast.error("Name cannot exceed 50 characters");
+      return;
+    }
+
+    if (!EMAIL_REGEX.test(trimmedEmail)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
     try {
       setLoading(true);
-      await register(formData.name, formData.email, formData.password);
+      await register(trimmedName, trimmedEmail, formData.password);
       toast.success("Account created successfully!");
       navigate("/");
     } catch (error) {
@@ -64,6 +91,7 @@ export default function Signup() {
                     placeholder="First and last name"
                     value={formData.name}
                     onChange={handleChange}
+                    maxLength={50}
                     className="mt-1 border-gray-400"
                     required
                   />
@@ -77,6 +105,7 @@ export default function Signup() {
                     placeholder="example@gmail.com"
                     value={formData.email}
                     onChange={handleChange}
+                    maxLength={100}
                     className="mt-1 border-gray-400"
                     required
                   />
@@ -84,15 +113,25 @@ export default function Signup() {
 
                 <div>
                   <label className="text-xs font-semibold">Password</label>
-                  <Input
-                    type="password"
-                    name="password"
-                    placeholder="At least 6 characters"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="mt-1 border-gray-400"
-                    required
-                  />
+                  <div className="relative mt-1">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      placeholder="At least 6 characters"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className="pr-10 border-gray-400"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
+                  </div>
                   <p className="text-xs text-gray-500 mt-1">
                     Passwords must be at least 6 characters.
                   </p>
@@ -147,7 +186,7 @@ export default function Signup() {
         </div>
 
         <footer className="text-xs text-gray-500 mt-6 text-center">
-          © 2025 Quickstore Shop | Built by Fahmaz Ashraf
+          © {new Date().getFullYear()} Quickstore Shop | Built by Fahmaz Ashraf
         </footer>
       </div>
     </div>

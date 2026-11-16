@@ -46,7 +46,7 @@ export default function Navbar() {
             <MapPin className="mr-1 w-4 h-4 text-gray-300" />
             <div className="flex flex-col leading-tight">
               <span className="text-[11px] text-gray-400">Delivering to</span>
-              <span className="text-xs font-semibold -mt-0.5">India</span>
+              <span className="text-xs font-semibold -mt-0.5">Calicut,India</span>
             </div>
           </div>
 

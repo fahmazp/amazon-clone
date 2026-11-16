@@ -8,9 +8,11 @@ import { useAuth } from "@/context/AuthContext";
 import QuickstoreLogo from '../assets/images/storelogo.png';
 import GoogleLogo from '../assets/images/google.svg';
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
@@ -71,16 +73,26 @@ export default function Login() {
 
             <div>
               <label className="text-sm font-medium">Password</label>
-              <Input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className="mt-1 border-gray-400"
-                required
-              />
+              <div className="relative mt-1">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="pr-10 border-gray-400"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
               <Link
-                to="#"
+                to="/forgot-password"
                 className="text-xs text-blue-700 hover:underline mt-1 inline-block"
               >
                 Forgot your password?
@@ -141,7 +153,7 @@ export default function Login() {
     </div>
 
     <footer className="text-xs text-gray-500 mt-6 text-center">
-        © 2025 Quickstore Shop | Built by Fahmaz Ashraf
+        © {new Date().getFullYear()} Quickstore Shop | Built by Fahmaz Ashraf
     </footer>
 
   </div>    

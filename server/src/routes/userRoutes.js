@@ -1,5 +1,10 @@
 import express from "express";
-import { loginUser, registerUser } from "../controllers/userController.js";
+import {
+  loginUser,
+  registerUser,
+  forgotPassword,
+  resetPassword,
+} from "../controllers/userController.js";
 import passport from "passport";
 import { generateToken } from "../utils/generateToken.js";
 import { authUser } from "../middlewares/authUser.js";
@@ -10,6 +15,8 @@ const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
 
 router.get(
   "/auth/google",

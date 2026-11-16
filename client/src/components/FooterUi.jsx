@@ -4,9 +4,9 @@ import { Mail } from 'lucide-react';
 export default function FooterUi() {
   const navLinks = [
     { href: '#', label: 'Home' },
-    { href: '#', label: 'Services' },
-    { href: '#', label: 'Help' },
     { href: '#', label: 'News' },
+    { href: '#', label: 'Settings' },
+    { href: '#', label: 'Help' },
   ];
 
   return (
@@ -32,7 +32,7 @@ export default function FooterUi() {
               shop@quickstore.com
             </a>
           </Button>
-          <p className="text-muted-foreground text-sm/6">© 2025 Quickstore — All rights reserved.</p>
+          <p className="text-muted-foreground text-sm/6">© {new Date().getFullYear()} Quickstore — All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import ProductDetails from "./pages/ProductDetails";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import OrderDetailsPage from "./pages/OrderDetailsPage";
@@ -39,6 +41,8 @@ function App() {
         {/* Auth routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
       </Routes>
 
       {/* Global Toast Notifications for all routes including Auth */}
