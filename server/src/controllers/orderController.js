@@ -10,9 +10,15 @@ export const createOrder = async (req, res) => {
       !shippingAddress.address?.trim() ||
       !shippingAddress.city?.trim() ||
       !shippingAddress.postalCode?.trim() ||
-      !shippingAddress.country?.trim()
+      !shippingAddress.country?.trim() ||
+      !shippingAddress.phone?.trim()
     ) {
-      return res.status(400).json({ message: "Please provide a complete shipping address" });
+      return res.status(400).json({ message: "Please provide a complete shipping address including phone number" });
+    }
+
+    const digitsOnly = shippingAddress.phone.replace(/[\s\-+]/g, "");
+    if (!/^\d{10,15}$/.test(digitsOnly)) {
+      return res.status(400).json({ message: "Please enter a valid phone number (10–15 digits)" });
     }
 
     const cart = await Cart.findOne({ user: req.user._id }).populate("items.product");

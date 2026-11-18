@@ -24,6 +24,7 @@ const CheckoutPage = () => {
     city: "",
     postalCode: "",
     country: "India",
+    phone: "",
   });
 
   const [paymentMethod, setPaymentMethod] = useState("Cash on Delivery");
@@ -45,6 +46,12 @@ const CheckoutPage = () => {
     e.preventDefault();
     if (!shippingAddress.address.trim() || !shippingAddress.city.trim() || !shippingAddress.postalCode.trim()) {
       toast.error("Please fill in all required shipping address fields");
+      return;
+    }
+
+    const digitsOnly = shippingAddress.phone.replace(/[\s\-+]/g, "");
+    if (!shippingAddress.phone.trim() || !/^\d{10,15}$/.test(digitsOnly)) {
+      toast.error("Please enter a valid phone number (10–15 digits)");
       return;
     }
 
@@ -98,7 +105,7 @@ const CheckoutPage = () => {
                 <input
                   type="text"
                   placeholder="e.g. 123 Main Street, Apt 4B"
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-yellow-400 focus:outline-none"
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-yellow-400 focus:outline-none placeholder:text-gray-400"
                   value={shippingAddress.address}
                   onChange={(e) =>
                     setShippingAddress({ ...shippingAddress, address: e.target.value })
@@ -115,7 +122,7 @@ const CheckoutPage = () => {
                   <input
                     type="text"
                     placeholder="e.g. Mumbai"
-                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-yellow-400 focus:outline-none"
+                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-yellow-400 focus:outline-none placeholder:text-gray-400"
                     value={shippingAddress.city}
                     onChange={(e) =>
                       setShippingAddress({ ...shippingAddress, city: e.target.value })
@@ -130,7 +137,7 @@ const CheckoutPage = () => {
                   <input
                     type="text"
                     placeholder="e.g. 400001"
-                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-yellow-400 focus:outline-none"
+                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-yellow-400 focus:outline-none placeholder:text-gray-400"
                     value={shippingAddress.postalCode}
                     onChange={(e) =>
                       setShippingAddress({ ...shippingAddress, postalCode: e.target.value })
@@ -147,13 +154,32 @@ const CheckoutPage = () => {
                 <input
                   type="text"
                   placeholder="Country"
-                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-yellow-400 focus:outline-none"
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-yellow-400 focus:outline-none placeholder:text-gray-400"
                   value={shippingAddress.country}
                   onChange={(e) =>
                     setShippingAddress({ ...shippingAddress, country: e.target.value })
                   }
                   required
                 />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">
+                  Phone Number *
+                </label>
+                <input
+                  type="tel"
+                  placeholder="e.g. +91 98765 43210"
+                  className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:ring-1 focus:ring-yellow-400 focus:outline-none placeholder:text-gray-400"
+                  value={shippingAddress.phone}
+                  onChange={(e) =>
+                    setShippingAddress({ ...shippingAddress, phone: e.target.value })
+                  }
+                  required
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  For delivery coordination (10–15 digits)
+                </p>
               </div>
             </div>
           </div>
