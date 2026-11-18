@@ -34,6 +34,9 @@ export default function FooterUi() {
           </Button>
           <p className="text-muted-foreground text-sm/6">© {new Date().getFullYear()} Quickstore — All rights reserved.</p>
         </div>
+        <p className="text-center text-xs text-muted-foreground/60 mt-1 pb-1">
+          Product names, images, and brands used for educational and portfolio demonstration purposes only. No commercial affiliation or endorsement intended.
+        </p>
       </div>
     </footer>
   );
