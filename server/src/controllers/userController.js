@@ -4,10 +4,11 @@ import crypto from "crypto";
 import { sendEmail } from "../utils/sendEmail.js";
 
 const setTokenCookie = (res, token) => {
+  const isProduction = process.env.NODE_ENV === "production";
   res.cookie("token", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: isProduction,          // must be true when sameSite: "none"
+    sameSite: isProduction ? "none" : "lax", // "none" for cross-origin in prod, "lax" for local
     maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   });
 };
