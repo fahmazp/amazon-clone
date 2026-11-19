@@ -31,10 +31,11 @@ router.get(
   }),
   (req, res) => {
     const token = generateToken(req.user._id);
+    const isProduction = process.env.NODE_ENV === "production";
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
     res.redirect(`${CLIENT_URL}/`);

@@ -81,10 +81,10 @@ const MyOrdersPage = () => {
                 <Package size={16} />
                 <span>{order.orderItems.length} items</span>
               </div>
-              <div className="flex items-center gap-1">
-                <IndianRupee size={16} />
-                <span className="font-medium">
-                  ₹{order.totalPrice?.toFixed(2)}
+              <div className="flex items-center gap-0.5">
+                <IndianRupee size={14} />
+                <span className="font-semibold">
+                  {order.totalPrice?.toFixed(2)}
                 </span>
               </div>
               <div className="flex items-center gap-1">
